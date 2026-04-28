@@ -7,6 +7,7 @@ import LoadingSpinner from './LoadingSpinner';
 import { fileToBase64 } from '../utils/fileUtils';
 import { editImage, generateAffiliateScripts, regenerateVisualPrompt, regenerateSceneScript } from '../services/geminiService';
 import { IMAGE_ASPECT_RATIOS } from '../constants';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 interface AffiliateKitProps {
   addGenerationToHistory: (generation: Generation) => void;
@@ -57,26 +58,26 @@ const AffiliateKit: React.FC<AffiliateKitProps> = ({ addGenerationToHistory, upd
   // Image Generation State
   const [productImage, setProductImage] = useState<ImageState | null>(null);
   const [modelFace, setModelFace] = useState<ImageState | null>(null);
-  const [aspectRatio, setAspectRatio] = useState<ImageAspectRatio>('9:16');
-  const [gender, setGender] = useState<'pria' | 'wanita'>('wanita');
-  const [numImages, setNumImages] = useState(1);
-  const [clothingType, setClothingType] = useState<'default' | 'custom'>('default');
-  const [customClothing, setCustomClothing] = useState('');
-  const [posePrompt, setPosePrompt] = useState('');
+  const [aspectRatio, setAspectRatio] = useLocalStorage<ImageAspectRatio>('sandari_affiliate_aspect', '9:16');
+  const [gender, setGender] = useLocalStorage<'pria' | 'wanita'>('sandari_affiliate_gender', 'wanita');
+  const [numImages, setNumImages] = useLocalStorage<number>('sandari_affiliate_count', 1);
+  const [clothingType, setClothingType] = useLocalStorage<'default' | 'custom'>('sandari_affiliate_clothing_type', 'default');
+  const [customClothing, setCustomClothing] = useLocalStorage<string>('sandari_affiliate_custom_clothing', '');
+  const [posePrompt, setPosePrompt] = useLocalStorage<string>('sandari_affiliate_pose', '');
   
   // Video Generation State
-  const [numScenes, setNumScenes] = useState(3);
-  const [sceneDuration, setSceneDuration] = useState(5);
-  const [language, setLanguage] = useState('id');
-  const [voiceStyle, setVoiceStyle] = useState('gaul');
-  const [cta, setCta] = useState('buy_now');
-  const [transition, setTransition] = useState('fade');
+  const [numScenes, setNumScenes] = useLocalStorage<number>('sandari_affiliate_scenes', 3);
+  const [sceneDuration, setSceneDuration] = useLocalStorage<number>('sandari_affiliate_duration', 5);
+  const [language, setLanguage] = useLocalStorage<string>('sandari_affiliate_lang', 'id');
+  const [voiceStyle, setVoiceStyle] = useLocalStorage<string>('sandari_affiliate_voice', 'gaul');
+  const [cta, setCta] = useLocalStorage<string>('sandari_affiliate_cta', 'buy_now');
+  const [transition, setTransition] = useLocalStorage<string>('sandari_affiliate_transition', 'fade');
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<Generation | null>(null);
-  const [activeStep, setActiveStep] = useState<'setup' | 'result'>('setup');
-  const [selectedResultIndex, setSelectedResultIndex] = useState(0);
+  const [result, setResult] = useLocalStorage<Generation | null>('sandari_affiliate_result', null);
+  const [activeStep, setActiveStep] = useLocalStorage<'setup' | 'result'>('sandari_affiliate_step', 'setup');
+  const [selectedResultIndex, setSelectedResultIndex] = useLocalStorage<number>('sandari_affiliate_selected_idx', 0);
   const [showVideoSettings, setShowVideoSettings] = useState(false);
   const [isUpdatingScript, setIsUpdatingScript] = useState(false);
   const [isRegeneratingPrompt, setIsRegeneratingPrompt] = useState<string | null>(null);

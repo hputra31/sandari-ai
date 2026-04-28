@@ -3,7 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { generateVoiceOverScript } from '../services/geminiService';
 import { Generation } from '../types';
+import { fileToBase64 } from '../utils/fileUtils';
 import Icon from './Icons';
+import useLocalStorage from '../hooks/useLocalStorage';
 import LoadingSpinner from './LoadingSpinner';
 
 interface VoiceOverProps {
@@ -27,11 +29,11 @@ const TONES = [
 ];
 
 const VoiceOver: React.FC<VoiceOverProps> = ({ addGenerationToHistory }) => {
-  const [topic, setTopic] = useState('');
-  const [tone, setTone] = useState('professional');
-  const [language, setLanguage] = useState('id-ID');
-  const [duration, setDuration] = useState(30);
-  const [script, setScript] = useState('');
+  const [topic, setTopic] = useLocalStorage<string>('sandari_voice_topic', '');
+  const [tone, setTone] = useLocalStorage<string>('sandari_voice_tone', 'professional');
+  const [language, setLanguage] = useLocalStorage<string>('sandari_voice_lang', 'id-ID');
+  const [duration, setDuration] = useLocalStorage<number>('sandari_voice_duration', 30);
+  const [script, setScript] = useLocalStorage<string>('sandari_voice_script', '');
   const [isLoading, setIsLoading] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [error, setError] = useState<string | null>(null);

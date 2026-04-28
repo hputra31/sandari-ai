@@ -8,6 +8,7 @@ import LoadingSpinner from './LoadingSpinner';
 import ImageUploader from './ImageUploader';
 import { fileToBase64 } from '../utils/fileUtils';
 import Icon from './Icons';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 interface PhotoEditorProps {
   addGenerationToHistory: (generation: Generation) => void;
@@ -15,10 +16,10 @@ interface PhotoEditorProps {
 }
 
 const PhotoEditor: React.FC<PhotoEditorProps> = ({ addGenerationToHistory, onSendToVideo }) => {
-  const [prompt, setPrompt] = useState<string>('');
+  const [prompt, setPrompt] = useLocalStorage<string>('sandari_editor_prompt', '');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [generatedImages, setGeneratedImages] = useState<string[]>([]);
+  const [generatedImages, setGeneratedImages] = useLocalStorage<string[]>('sandari_editor_results', []);
   
   const [uploadedImage, setUploadedImage] = useState<{ file: File; previewUrl: string } | null>(null);
   const [referenceImage, setReferenceImage] = useState<{ file: File; previewUrl: string } | null>(null);

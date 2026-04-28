@@ -15,8 +15,8 @@ type Tab = 'image' | 'video' | 'editor' | 'affiliate' | 'voice' | 'gallery';
 
 const App: React.FC = () => {
   // App State
-  const [activeTab, setActiveTab] = useState<Tab>('image');
-  const [prefilledVideoData, setPrefilledVideoData] = useState<{ image?: string, prompt?: string } | null>(null);
+  const [activeTab, setActiveTab] = useLocalStorage<Tab>('sandari_active_tab', 'image');
+  const [prefilledVideoData, setPrefilledVideoData] = useLocalStorage<{ image?: string, prompt?: string } | null>('sandari_prefilled_video', null);
   const [history, setHistory, isHistoryLoaded] = useLocalStorage<Generation[]>('sandari_ai_history', []);
   
   const addGenerationToHistory = (generation: Generation) => {

@@ -9,6 +9,7 @@ import ImageUploader from './ImageUploader';
 import { fileToBase64 } from '../utils/fileUtils';
 import Icon from './Icons';
 import { GoogleGenAI } from "@google/genai";
+import useLocalStorage from '../hooks/useLocalStorage';
 
 interface VideoGeneratorProps {
   addGenerationToHistory: (generation: Generation) => void;
@@ -21,13 +22,13 @@ const VideoGenerator: React.FC<VideoGeneratorProps> = ({
   prefilledData,
   onClearPrefilled
 }) => {
-  const [prompt, setPrompt] = useState<string>('');
-  const [aspectRatio, setAspectRatio] = useState<VideoAspectRatio>('16:9');
-  const [resolution, setResolution] = useState<Resolution>('720p');
+  const [prompt, setPrompt] = useLocalStorage<string>('sandari_video_prompt', '');
+  const [aspectRatio, setAspectRatio] = useLocalStorage<VideoAspectRatio>('sandari_video_aspect', '16:9');
+  const [resolution, setResolution] = useLocalStorage<Resolution>('sandari_video_res', '720p');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [loadingMessage, setLoadingMessage] = useState<string>(VIDEO_LOADING_MESSAGES[0]);
   const [error, setError] = useState<string | null>(null);
-  const [generatedVideo, setGeneratedVideo] = useState<string | null>(null);
+  const [generatedVideo, setGeneratedVideo] = useLocalStorage<string | null>('sandari_video_result', null);
   const [uploadedImage, setUploadedImage] = useState<{ file?: File; previewUrl: string } | null>(null);
   
   // Progress simulation since video gen is async and takes time

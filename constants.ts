@@ -296,6 +296,12 @@ export const EDITOR_TOOLS = [
         prompt: 'Ubah menjadi gaya animasi karakter 3D ala Pixar atau Disney, lucu, pencahayaan lembut, tekstur halus.'
     },
     {
+        id: 'chibi_hijab',
+        icon: 'heart',
+        label: 'Expressive Chibi',
+        prompt: 'Convert the person in the photo into a highly expressive 3D chibi-style digital illustration. The character should wear a stylish hijab matching the original. Character features: large expressive eyes, puffed out red cheeks with a cute pouty pouting expression. High-quality 3D render style akin to Pixar or Disney, soft cinematic lighting. Include decorative elements floating around like pink hearts and glowing gold stars. Solid black background. The result should be extremely cute, kawaii, and stylized but still recognizable as the person.'
+    },
+    {
         id: 'hd',
         icon: 'sparkles',
         label: 'Perjelas / HD',

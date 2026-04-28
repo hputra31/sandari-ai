@@ -77,6 +77,7 @@ const iconMap: Record<string, string> = {
   flower: 'lucide:flower-2',
   bear: 'lucide:paw-print',
   sparkles: 'lucide:sparkles',
+  heart: 'lucide:heart',
   scissors: 'lucide:scissors',
   robot: 'lucide:bot',
   passport: 'lucide:book-user',

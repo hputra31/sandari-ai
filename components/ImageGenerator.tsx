@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { generateImages, editImage, generateAffiliateScripts, regenerateVisualPrompt, regenerateSceneScript } from '../services/geminiService';
 import { ImageAspectRatio, Generation } from '../types';
@@ -8,6 +8,7 @@ import LoadingSpinner from './LoadingSpinner';
 import ImageUploader from './ImageUploader';
 import { fileToBase64 } from '../utils/fileUtils';
 import Icon from './Icons';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 interface ImageGeneratorProps {
   addGenerationToHistory: (generation: Generation) => void;
@@ -133,21 +134,21 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({
   updateGenerationInHistory,
   onSendToVideo
 }) => {
-  const [prompt, setPrompt] = useState<string>('');
-  const [numberOfImages, setNumberOfImages] = useState<number>(1);
-  const [aspectRatio, setAspectRatio] = useState<ImageAspectRatio>('1:1');
-  const [style, setStyle] = useState<string>('');
-  const [lighting, setLighting] = useState<string>('');
-  const [enhanceFace, setEnhanceFace] = useState<boolean>(false);
-  const [keepOriginalFace, setKeepOriginalFace] = useState<boolean>(false); 
-  const [isNanoBanana, setIsNanoBanana] = useState<boolean>(false);
-  const [selectedModeId, setSelectedModeId] = useState<string>('');
-  const [gender, setGender] = useState<'pria' | 'wanita'>('wanita');
-  const [clothingType, setClothingType] = useState<'default' | 'custom'>('default');
-  const [customClothing, setCustomClothing] = useState('');
+  const [prompt, setPrompt] = useLocalStorage<string>('sandari_image_prompt', '');
+  const [numberOfImages, setNumberOfImages] = useLocalStorage<number>('sandari_image_count', 1);
+  const [aspectRatio, setAspectRatio] = useLocalStorage<ImageAspectRatio>('sandari_image_aspect', '1:1');
+  const [style, setStyle] = useLocalStorage<string>('sandari_image_style', '');
+  const [lighting, setLighting] = useLocalStorage<string>('sandari_image_lighting', '');
+  const [enhanceFace, setEnhanceFace] = useLocalStorage<boolean>('sandari_image_enhance_face', false);
+  const [keepOriginalFace, setKeepOriginalFace] = useLocalStorage<boolean>('sandari_image_keep_face', false); 
+  const [isNanoBanana, setIsNanoBanana] = useLocalStorage<boolean>('sandari_image_nano', false);
+  const [selectedModeId, setSelectedModeId] = useLocalStorage<string>('sandari_image_mode', '');
+  const [gender, setGender] = useLocalStorage<'pria' | 'wanita'>('sandari_image_gender', 'wanita');
+  const [clothingType, setClothingType] = useLocalStorage<'default' | 'custom'>('sandari_image_clothing_type', 'default');
+  const [customClothing, setCustomClothing] = useLocalStorage<string>('sandari_image_custom_clothing', '');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [generatedImages, setGeneratedImages] = useState<string[]>([]);
+  const [generatedImages, setGeneratedImages] = useLocalStorage<string[]>('sandari_image_results', []);
   
   // State for two images (Removed 3rd image)
   const [uploadedImage1, setUploadedImage1] = useState<{ file: File; previewUrl: string } | null>(null);
@@ -160,7 +161,7 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({
   const [copiedSceneIndex, setCopiedSceneIndex] = useState<string | null>(null);
   
   // Video & Script State
-  const [selectedResultIndex, setSelectedResultIndex] = useState(0);
+  const [selectedResultIndex, setSelectedResultIndex] = useLocalStorage<number>('sandari_image_selected_idx', 0);
   const [showVideoSettings, setShowVideoSettings] = useState(false);
   const [isUpdatingScript, setIsUpdatingScript] = useState(false);
   const [numScenes, setNumScenes] = useState(3);
@@ -169,8 +170,8 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({
   const [voiceStyle, setVoiceStyle] = useState('gaul');
   const [cta, setCta] = useState('buy_now');
   const [transition, setTransition] = useState('fade');
-  const [imageScripts, setImageScripts] = useState<ScriptData[]>([]);
-  const [currentGenerationId, setCurrentGenerationId] = useState<string | null>(null);
+  const [imageScripts, setImageScripts] = useLocalStorage<ScriptData[]>('sandari_image_scripts', []);
+  const [currentGenerationId, setCurrentGenerationId] = useLocalStorage<string | null>('sandari_image_gen_id', null);
   const [isRegeneratingPrompt, setIsRegeneratingPrompt] = useState<string | null>(null);
   const [isRegeneratingScript, setIsRegeneratingScript] = useState<string | null>(null);
 
