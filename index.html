@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SANDARI AI Image & Video Generator</title>
+    
+    <!-- Google Fonts: Outfit (Geometric Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Outfit', 'system-ui', 'sans-serif'], 
+              display: ['Outfit', 'sans-serif'], 
+            },
+            animation: {
+              'blob': 'blob 20s infinite',
+              'grid-flow': 'grid-move 40s linear infinite',
+              'float-up': 'float-up 80s linear infinite',
+              'spin-slow': 'spin 12s linear infinite',
+              'fade-in': 'fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              'grid-move': {
+                '0%': { backgroundPosition: '0 0' },
+                '100%': { backgroundPosition: '100px 100px' },
+              },
+              'float-up': {
+                '0%': { backgroundPosition: '0 0' },
+                '100%': { backgroundPosition: '0 -1000px' },
+              },
+              'blob': {
+                '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                '33%': { transform: 'translate(60px, -80px) scale(1.1)' },
+                '66%': { transform: 'translate(-40px, 40px) scale(0.9)' },
+                '100%': { transform: 'translate(0px, 0px) scale(1)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom": "https://aistudiocdn.com/react-dom@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.1",
+    "@iconify/react": "https://esm.sh/@iconify/react@5.0.0?external=react"
+  }
+}
+</script>
+<style>
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .animate-gradient-text {
+    background-size: 200% auto;
+    animation: gradient-shift 3s linear infinite;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent; 
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1); 
+    border-radius: 100px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #ec4899; 
+    border: 0px solid transparent;
+  }
+
+  /* Cyber Grid Background */
+  .bg-grid-pattern {
+    background-size: 80px 80px;
+    background-image: 
+      linear-gradient(to right, rgba(236, 72, 153, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(168, 85, 247, 0.05) 1px, transparent 1px);
+  }
+  
+  /* Floating Stars/Particles Pattern */
+  .bg-star-pattern {
+    background-image: 
+        radial-gradient(1.5px 1.5px at 25px 5px, rgba(255, 255, 255, 0.2), transparent),
+        radial-gradient(1.5px 1.5px at 50px 25px, rgba(236, 72, 153, 0.2), transparent),
+        radial-gradient(1.5px 1.5px at 125px 20px, rgba(168, 85, 247, 0.2), transparent),
+        radial-gradient(2px 2px at 200px 150px, rgba(236, 72, 153, 0.1), transparent);
+    background-size: 400px 400px;
+  }
+
+  .glass-panel {
+    background: rgba(10, 10, 15, 0.6);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+</style>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-gray-950 text-gray-100 font-sans min-h-screen relative overflow-x-hidden selection:bg-pink-500 selection:text-black">
+    <!-- Moving Background Grid -->
+    <div class="fixed inset-0 bg-grid-pattern pointer-events-none z-0 animate-grid-flow opacity-30"></div>
+    
+    <!-- Moving Particles/Stars -->
+    <div class="fixed inset-0 bg-star-pattern pointer-events-none z-0 animate-float-up opacity-60 mix-blend-screen"></div>
+    
+    <!-- Animated Glowing Orbs -->
+    <div class="fixed top-0 left-1/4 w-[500px] h-[500px] bg-pink-500/10 rounded-full blur-[120px] pointer-events-none z-0 animate-blob mix-blend-screen"></div>
+    <div class="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none z-0 animate-blob animation-delay-2000 mix-blend-screen"></div>
+    <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none z-0 animate-blob animation-delay-4000 mix-blend-screen"></div>
+    
+    <div id="root" class="relative z-10"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
+    

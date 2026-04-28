@@ -1,0 +1,5 @@
+{
+  "name": "SANDARI AI v2",
+  "description": "Aplikasi canggih bertenaga AI untuk membuat gambar dan video menakjubkan dari perintah teks menggunakan Google Gemini API. Sesuaikan rasio aspek, resolusi, dan lainnya untuk menghidupkan ide kreatif Anda.",
+  "requestFramePermissions": []
+}
