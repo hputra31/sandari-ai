@@ -155,7 +155,8 @@ export const editImage = async (
   prompt: string,
   images: { data: string; mimeType: string }[],
   aspectRatio?: ImageAspectRatio,
-  numberOfImages: number = 1
+  numberOfImages: number = 1,
+  isNanoBanana: boolean = false
 ): Promise<string[]> => {
   const apiKey = getApiKey();
   if (!apiKey) throw new Error("API Key tidak ditemukan.");
@@ -176,9 +177,14 @@ export const editImage = async (
         });
       });
 
-      const specificPrompt = numberOfImages > 1 
+      let finalPrompt = numberOfImages > 1 
         ? `${prompt} (Variation ${index + 1})` 
         : prompt;
+
+      // Enhance prompt if Nano Banana mode is on
+      if (isNanoBanana) {
+          finalPrompt = `[NANO BANANA HIGH-FIDELITY MODE] ${finalPrompt}. Ultra-realistic detail, cinematic lighting, 8k resolution, masterful composition, sharp focus, professional color grading.`;
+      }
 
       // Prefix with a strong task instruction to prevent the model from just chatting or repeating the prompt
       const taskPrefix = "IMAGE GENERATION TASK: You MUST output an image part, not text. Use the provided images as reference and apply this instruction: ";
@@ -189,7 +195,7 @@ export const editImage = async (
         : "";
 
       parts.push({
-        text: taskPrefix + specificPrompt + identityInstruction,
+        text: taskPrefix + finalPrompt + identityInstruction,
       });
 
       try {

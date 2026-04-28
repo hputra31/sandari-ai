@@ -17,6 +17,7 @@ interface PhotoEditorProps {
 
 const PhotoEditor: React.FC<PhotoEditorProps> = ({ addGenerationToHistory, onSendToVideo }) => {
   const [prompt, setPrompt] = useLocalStorage<string>('sandari_editor_prompt', '');
+  const [isNanoBanana, setIsNanoBanana] = useLocalStorage<boolean>('sandari_editor_nano', false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [generatedImages, setGeneratedImages] = useLocalStorage<string[]>('sandari_editor_results', []);
@@ -81,7 +82,7 @@ const PhotoEditor: React.FC<PhotoEditorProps> = ({ addGenerationToHistory, onSen
              imagesPayload.push({ data: refBase64, mimeType: referenceImage.file.type });
         }
         
-        const images = await editImage(trimmedPrompt, imagesPayload);
+        const images = await editImage(trimmedPrompt, imagesPayload, undefined, 1, isNanoBanana);
         
         if (images.length === 0) {
             throw new Error("AI tidak mengembalikan gambar. Coba instruksi yang berbeda.");
@@ -136,8 +137,42 @@ const PhotoEditor: React.FC<PhotoEditorProps> = ({ addGenerationToHistory, onSen
       <div className="flex flex-col gap-6">
         
         <div className="flex flex-col gap-5">
+           {/* Nano Banana Mode Toggle */}
+           <div className="glass-panel p-1 rounded-2xl border border-gray-800/50 overflow-hidden relative">
+              <div className="flex bg-black/20 p-2">
+                 <button 
+                   onClick={() => setIsNanoBanana(!isNanoBanana)}
+                   className={`flex-1 flex items-center justify-center gap-3 py-3 px-4 rounded-xl border transition-all duration-500 group ${
+                     isNanoBanana 
+                     ? 'bg-yellow-500/10 border-yellow-500/40 text-yellow-500 shadow-[0_0_25px_rgba(234,179,8,0.15)]' 
+                     : 'bg-gray-900 border-gray-800 text-gray-500 hover:border-gray-700'
+                   }`}
+                 >
+                    <div className={`relative w-6 h-6 rounded-full flex items-center justify-center transition-all duration-500 ${isNanoBanana ? 'scale-125 rotate-[360deg]' : 'scale-100'}`}>
+                       <div className={`absolute inset-0 bg-yellow-500/20 rounded-full blur-md animate-pulse ${isNanoBanana ? 'block' : 'hidden'}`}></div>
+                       <Icon name="logo" className={`w-full h-full relative z-10 ${isNanoBanana ? 'text-yellow-500' : 'text-gray-600'}`} />
+                    </div>
+                    <div className="flex flex-col items-start leading-none">
+                       <span className="text-[10px] font-black uppercase tracking-[0.2em] mb-1">NANO BANANA ENGINE</span>
+                       <span className={`text-[8px] font-bold uppercase transition-colors ${isNanoBanana ? 'text-yellow-500/80' : 'text-gray-700'}`}>
+                          {isNanoBanana ? 'High-Performance Mode Active' : 'Standard Speed Mode'}
+                       </span>
+                    </div>
+                    <div className="ml-auto">
+                       <div className={`w-10 h-5 rounded-full border transition-all duration-500 relative ${isNanoBanana ? 'bg-yellow-500 border-yellow-400' : 'bg-gray-800 border-gray-700'}`}>
+                          <motion.div 
+                            animate={{ x: isNanoBanana ? 20 : 0 }}
+                            className={`absolute top-0.5 left-0.5 w-3.5 h-3.5 rounded-full shadow-sm transition-colors ${isNanoBanana ? 'bg-white' : 'bg-gray-600'}`}
+                          />
+                       </div>
+                    </div>
+                 </button>
+              </div>
+           </div>
+
           {/* Image Uploader Container */}
           <div className="grid grid-cols-2 gap-3">
+
               <div className="glass-panel p-1 rounded-2xl border border-gray-800/50">
                  <ImageUploader 
                     onImageUpload={handleImageUpload}
