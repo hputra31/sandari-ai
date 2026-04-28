@@ -25,13 +25,13 @@ const SAFETY_SETTINGS = [
 
 // Helper to stagger requests with jitter
 const delay = (ms: number) => {
-    const jitter = Math.random() * 2000; // Increased jitter
+    const jitter = Math.random() * 500; // Reduced jitter from 2000ms
     return new Promise(resolve => setTimeout(resolve, ms + jitter));
 };
 
-const QUOTA_ERROR_MESSAGE = "Batas penggunaan AI (Quota) sedang penuh. Kami sudah mencoba mengulang otomatis namun sistem pusat masih sibuk. Mohon tunggu 1-2 menit lalu coba lagi.";
+const QUOTA_ERROR_MESSAGE = "Batas penggunaan AI (Quota) sedang penuh. Mohon tunggu beberapa saat lalu coba lagi.";
 
-const withRetry = async <T>(fn: () => Promise<T>, retries = 12, initialDelay = 5000): Promise<T> => {
+const withRetry = async <T>(fn: () => Promise<T>, retries = 5, initialDelay = 2000): Promise<T> => {
     let currentDelay = initialDelay;
     for (let i = 0; i < retries + 1; i++) {
         try {
@@ -76,7 +76,7 @@ export const generateImages = async (
   const ai = new GoogleGenAI({ apiKey });
   
   const generateSingleImage = async (index: number) => {
-      await delay(index * 4000); 
+      await delay(index * 1000); // Reduced stagger from 4000ms
 
       const finalPrompt = numberOfImages > 1 
         ? `${prompt} --variation ${index + 1}` 
@@ -163,7 +163,7 @@ export const editImage = async (
   const ai = new GoogleGenAI({ apiKey });
   
   const generateSingleConcept = async (index: number) => {
-      await delay(index * 4000);
+      await delay(index * 1000); // Reduced stagger from 4000ms
 
       const parts: any[] = [];
   

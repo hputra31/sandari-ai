@@ -4,7 +4,7 @@ import { ImageAspectRatio, VideoAspectRatio, Resolution } from './types';
 export const IMAGE_MODEL = 'gemini-2.5-flash-image';
 export const IMAGE_EDIT_MODEL = 'gemini-2.5-flash-image';
 export const VIDEO_MODEL = 'veo-3.1-lite-generate-preview';
-export const CHAT_MODEL = 'gemini-flash-latest';
+export const CHAT_MODEL = 'gemini-2.0-flash';
 
 export const IMAGE_ASPECT_RATIOS: ImageAspectRatio[] = ["1:1", "16:9", "9:16", "4:3", "3:4"];
 export const VIDEO_ASPECT_RATIOS: VideoAspectRatio[] = ["16:9", "9:16"];
